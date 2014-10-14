@@ -26,6 +26,8 @@
   $taxrate = 0.10; // local sales tax is 10%
   $totalamount = $totalamount * (1 + $taxrate);
   echo "Total including tax: $" . number_format($totalamount, 2) . "<br />";
+
+  echo "DOCUMENT_ROOT: " . $_SERVER['DOCUMENT_ROOT'];
 ?>
 
 </body>
