@@ -27,27 +27,29 @@
     }
 
     $query = "select * from books where " . $searchtype . " like '%". $searchterm . "%'";
-    //echo $query;
-    $result = $db->query($query);
+    $stmt = $db->prepare($query);
+    $stmt->bind_result($isbn, $author, $title, $price);
+    $stmt->execute();
+    $stmt->store_result();
 
-    $num_results = $result->num_rows;
+    $num_results = $stmt->num_rows;
 
     echo "<p>Number of books found: " . $num_results . "</p>";
 
     for ($i = 0; $i < $num_results; $i++) {
-        $row = $result->fetch_assoc();
+        $stmt->fetch();
         echo "<p><strong>" . ($i + 1) . ". Title: ";
-        echo htmlspecialchars(stripslashes($row['title']));
+        echo htmlspecialchars(stripslashes($title));
         echo "</strong><br />Author: ";
-        echo htmlspecialchars(stripslashes($row['author']));
+        echo htmlspecialchars(stripslashes($author));
         echo "<br />ISBN: ";
-        echo htmlspecialchars(stripslashes($row['isbn']));
+        echo htmlspecialchars(stripslashes($isbn));
         echo "<br />Price: ";
-        echo htmlspecialchars(stripslashes($row['price']));
+        echo htmlspecialchars(stripslashes($price));
         echo "</p>";
     }
 
-    $result->free();
+    $stmt->close();
     $db->close();
 
   ?>

@@ -34,9 +34,10 @@ if (mysqli_connect_errno()) {
     exit;
 }
 
-$query = "insert into books values
-    ('" . $isbn . "', '" . $author . "', '" . $title . "', '" . $price . "')";
-$result = $db->query($query);
+$query = "insert into books values(?, ?, ?, ?)";
+$stmt = $db->prepare($query);
+$stmt->bind_param("sssd", $isbn, $author, $title, $price);
+$result = $stmt->execute();
 
 if ($result) {
     echo $db->affected_rows . " book inserted into database.";
